@@ -1,0 +1,6 @@
+flask
+flasgger
+flask-Sqlalchemy
+flask-restful
+passlib
+jwt
