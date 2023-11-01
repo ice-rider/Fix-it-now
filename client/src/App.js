@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Desktop version:
+import Header from './desktop/components/Header';
 import MainPage from './desktop/Pages/MainPage';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <BrowserView>
       <BrowserRouter>
         {/* desktop version */}
+        <Header />
         <Routes>
           <Route path='*' element={<MainPage />} />
         </Routes>
