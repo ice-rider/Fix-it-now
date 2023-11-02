@@ -1,3 +1,5 @@
+import LazyLoading from "./LazyLoadingImage";
+
 import styled from "@emotion/styled"
 import { Button, Typography, Avatar, List, ListItemButton, Divider, Popover } from "@mui/material"
 import { red } from '@mui/material/colors';
@@ -17,9 +19,6 @@ const LogoBox = styled("div") ({
     marginLeft: '30px',
     cursor: "pointer"
 })
-const LogoImg = styled("img") ({
-    position: 'relative', height: '40px', margin: '0 10px 5px 0'
-})
 const AuthButtonsWrapper = styled("div") ({
     display: 'flex',
     alignItems: 'center',
@@ -31,7 +30,17 @@ export default function Header () {
     return (
         <HeaderBox>
             <LogoBox onClick={()=>{navigate('/')}}>
-                <LogoImg src="/logo.png" alt="Logo Icon" />
+                <LazyLoading 
+                    bigImg='/logo.png'
+                    previewImg='/logo._min_.png'
+                    alt="logo"
+                    boxStyle={{
+                        position: 'relative',
+                        height: '40px',
+                        margin: '0 5px 5px 0',
+                        minWidth: '35px'
+                    }}
+                />
                 <Typography variant="h5">Fix it now</Typography>
             </LogoBox>
             <AuthBox />
@@ -104,6 +113,8 @@ function AccountButton () {
     const avatar_link = localStorage.avatar;
     const username = localStorage.username;
 
+    const closeMenu = () => { setIsPopOver(false) }
+
     return (
         <>
             <AccountButtonWrapper onClick={(event)=>{ setAnchorEl(event.currentTarget); setIsPopOver(true); }}> 
@@ -113,7 +124,7 @@ function AccountButton () {
             <Popover
                 open={isPopOver}
                 anchorEl={anchorEl}
-                onClose={()=>{setIsPopOver(false)}}
+                onClose={closeMenu}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'right',
@@ -122,24 +133,36 @@ function AccountButton () {
                     vertical: 'top',
                     horizontal: 'right',
                 }}
-                >
-                <AccountMenu />
+            >
+                <AccountMenu onClose={closeMenu} />
             </Popover>
         </>
     )
 }
 
 
-function AccountMenu () {
+function AccountMenu (props) {
+    const { onClose } = props;
     const navigate = useNavigate();
+
+    const clickHandler = (url) => {
+        console.log(url)
+        navigate(url);
+        onClose();
+    }
+
+    const LinkButton = (props) => {
+        const { url, text, sx } = props;
+        return <ListItemButton onClick={()=>{ clickHandler(url) }} sx={sx}> {text} </ListItemButton>
+    }
 
     return (
         <List sx={{width: 200 }}>
-            <ListItemButton onClick={()=>{navigate("/profile")}}>Профиль</ListItemButton>
-            <ListItemButton onClick={()=>{navigate("/settings")}}>Настройки</ListItemButton>
-            <ListItemButton onClick={()=>{navigate("/my-tickets")}}>Мои заявки</ListItemButton>
+            <LinkButton url="/profile" text="Профиль" />
+            <LinkButton url="/settings" text="Настройки" />
+            <LinkButton url="/my-tickets" text="Мои заявки" />
             <Divider />
-            <ListItemButton onClick={()=>{navigate("/logout")}} sx={{color: red[500]}}>Выйти</ListItemButton>
+            <LinkButton url="/logout" text="Выйти"  sx={{color: red[500]}} />
         </List>
     )
 }
