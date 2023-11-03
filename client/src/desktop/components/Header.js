@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom"
 const HeaderBox = styled("div") ({
     position: 'fixed', width: '100vw', height: '60px', zIndex: '5',
     display: 'flex', justifyContent: 'space-between',
-    borderBottom: '2px solid #eee'
+    borderBottom: '2px solid #e1e1e1',
+    background: 'whitesmoke' // TODO: темы сделать надо и тут поменять
 })
 const LogoBox = styled("div") ({
     position: 'relative',
@@ -76,8 +77,7 @@ function AuthBox () {
                 <AccountButton />
                 :
                 <AuthButtonsWrapper>
-                    <LinkButton variant="contained" src="/login" label="Log in" />
-                    <LinkButton variant="outlined" src="/register" label="Sign in" />
+                    <LinkButton variant="contained" src="/login" label="Вход" />
                 </AuthButtonsWrapper>
             }
         </>
