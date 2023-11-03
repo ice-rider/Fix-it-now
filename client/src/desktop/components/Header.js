@@ -76,8 +76,7 @@ function AuthBox () {
                 <AccountButton />
                 :
                 <AuthButtonsWrapper>
-                    <LinkButton variant="contained" src="/login" label="Log in" />
-                    <LinkButton variant="outlined" src="/register" label="Sign in" />
+                    <LinkButton variant="contained" src="/login" label="Вход" />
                 </AuthButtonsWrapper>
             }
         </>
