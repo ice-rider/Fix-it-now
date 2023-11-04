@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from './desktop/components/Header';
 import MainPage from './desktop/Pages/MainPage';
 import LoginPage from './desktop/Pages/LoginPage';
+import NewTicketPage from './desktop/Pages/NewTicketPage';
 
 function App() {
   axios.defaults.baseURL = "https://fix-it-now-24.onrender.com/api";
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path='*' element={<MainPage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path="/new-ticket" element={<NewTicketPage />} />
         </Routes>
       </BrowserRouter>
       </BrowserView>
