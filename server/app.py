@@ -1,7 +1,7 @@
 from flask import Flask
 from flasgger import Swagger
 
-from models import db
+from models import *
 from resources import api
 
 app = Flask(__name__)
