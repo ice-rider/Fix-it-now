@@ -1,10 +1,10 @@
 from .db import db
 
-from .Session import Session
-from .User import User
-from .Ticket import Ticket
-from .Feedback import Feedback
+from .Session import SessionModel
+from .User import UserModel, UserRole
+from .Ticket import TicketModel, TicketStatus
+from .Feedback import FeedbackModel
 
-from .UserPhoto import UserPhoto
-from .TicketPhoto import TicketPhoto
-from .Photo import Photo
+from .UserPhoto import UserPhotoModel
+from .TicketPhoto import TicketPhotoModel
+from .Photo import PhotoModel
