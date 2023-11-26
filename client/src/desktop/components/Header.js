@@ -1,5 +1,6 @@
 import LazyLoading from "./LazyLoadingImage";
-
+import { UserData } from "../../App";
+import { useContext } from "react";
 import styled from "@emotion/styled"
 import { Button, Typography, Avatar, List, ListItemButton, Divider, Popover } from "@mui/material"
 import { red } from '@mui/material/colors';
@@ -27,10 +28,12 @@ const AuthButtonsWrapper = styled("div") ({
 })
 
 export default function Header () {
+    const userData = useContext(UserData);
+    console.log(`userData: ${userData["text"]}`)
     const navigate = useNavigate();
     return (
         <HeaderBox>
-            <LogoBox onClick={()=>{navigate('/')}}>
+            <LogoBox onClick={()=>{navigate('/'); userData["text"] = "test2"}}>
                 <LazyLoading 
                     bigImg='/logo.png'
                     previewImg='/logo._min_.png'
@@ -42,7 +45,7 @@ export default function Header () {
                         minWidth: '35px'
                     }}
                 />
-                <Typography variant="h5">Fix it now</Typography>
+                <Typography variant="h5">Fix it now {userData["text"]}</Typography>
             </LogoBox>
             <AuthBox />
         </HeaderBox>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { createContext, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { BrowserView } from 'react-device-detect';
 import { ToastContainer } from 'react-toastify';
@@ -10,9 +10,12 @@ import Header from './desktop/components/Header';
 import MainPage from './desktop/Pages/MainPage';
 import LoginPage from './desktop/Pages/LoginPage';
 import NewTicketPage from './desktop/Pages/NewTicketPage';
+import DashboardPage from './desktop/Pages/DashboardPage';
+
+export const UserData = createContext(null);
 
 function App() {
-  axios.defaults.baseURL = "https://potential-yodel-4jj7r49vpr55f74jg-5050.app.github.dev/api";
+  axios.defaults.baseURL = "https://humble-memory-r979x4w9g6x2vg-5050.app.github.dev/api";
   axios.defaults.headers.post['Content-Type'] = 'application/json';
 
   return (
@@ -20,12 +23,15 @@ function App() {
       <BrowserView>
       <BrowserRouter>
         {/* desktop version */}
-        <Header />
-        <Routes>
-          <Route path='*' element={<MainPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path="/new-ticket" element={<NewTicketPage />} />
-        </Routes>
+        <UserData.Provider value={{text: 'test'}}>
+          <Header />
+          <Routes>
+            <Route path='*' element={<MainPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path="/new-ticket" element={<NewTicketPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+          </Routes>
+        </UserData.Provider>
       </BrowserRouter>
       </BrowserView>
       
