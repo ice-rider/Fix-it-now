@@ -3,6 +3,7 @@ from .auth import Auth
 from .ticket import Ticket
 from .user import User
 
+
 api = Api(prefix="/api")
 
 for resource in [Auth, Ticket, User]:

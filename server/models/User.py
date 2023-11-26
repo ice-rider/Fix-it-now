@@ -2,6 +2,7 @@ from enum import Enum
 from passlib.hash import pbkdf2_sha256
 
 from .db import db
+from .UserPhoto import UserPhotoModel
 
 
 class UserRole(Enum):
@@ -26,11 +27,13 @@ class UserModel(db.Model):
         :return: A dictionary containing the ID, username, role, and avatar of the object.
         :rtype: dict
         """
+        avatar = lambda id: (photo := UserPhotoModel.get_by_id(id)) and photo.json() or "default"
+
         return {
             "id": self.id,
             "username": self.username,
-            "role": self.role,
-            "avatar": UserPhoto.get_by_id(self.avatar_id).json()
+            "role": self.role.value,
+            "avatar": avatar(self.avatar_id)
         }
     
     def secure_json(self):
@@ -43,16 +46,15 @@ class UserModel(db.Model):
             "id": self.id,
             "login": self.login,
             "username": self.username,
-            "role": self.role
+            "role": self.role.value
         }
     
     @classmethod
     def auth(cls, login, password):
-        password = pbkdf2_sha256.hash(str(password))
-        for _ in cls.query.all():
-            print(_.login, _.password)
-        print(login, password)
-        return cls.query.filter_by(login=login, password=password).first()
+        user = cls.query.filter_by(login=login).first()
+        if user and pbkdf2_sha256.verify(password, user.password):
+            return user
     
-    def get_by_id(self, id):
-        return User.query.get(id)
+    @classmethod
+    def get_by_id(cls, id):
+        return cls.query.get(id)

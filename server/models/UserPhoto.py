@@ -21,7 +21,7 @@ class UserPhotoModel(db.Model):
         }
 
     @classmethod
-    def get_by_id(cld, id):
+    def get_by_id(cls, id):
         """
         Retrieves a user photo from the database based on the provided ID.
 

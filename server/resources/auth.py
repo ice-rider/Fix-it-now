@@ -11,52 +11,22 @@ class Auth(Resource):
 
     @classmethod
     def post(cls):
-        """
-        This method handles the authentication request.
-
-        ---
-        tags:
-          - Auth
-        parameters:
-          - in: body
-            name: body
-            description: JSON parameters.
-            schema:
-              properties:
-                login:
-                  type: string
-                  description: The login of the user.
-                  example: alice
-                password:
-                  type: string
-                  description: The password of the user.
-                  example: password
-        
-        responses:
-          200:
-            description: Successful authentication.
-            schema:
-              type: object
-              properties:
-                access_token:
-                  type: string
-          401:
-            description: Invalid credentials.
-        """
         args = auth_parser.parse_args()
-        login = args.get('login')
-        password = args.get('password')
+        login, password = args["login"], args["password"]
         user = UserModel.auth(login, password)
         
         if not user:
             return {'message': 'Invalid credentials'}, 401
 
         session = SessionModel(user_id=user.id)
+        session.save()
+        
         payload = {
             'id': user.id,
-            'role': user.role,
+            'role': user.role.value,
             'session_id': session.id
         }
+
         access_token = create_access_token(payload)
         session.token = access_token
         session.save()

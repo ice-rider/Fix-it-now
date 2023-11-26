@@ -18,3 +18,7 @@ class SessionModel(db.Model):
     
     def set_blocked(self):
         self.blocked = True
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()

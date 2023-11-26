@@ -1,7 +1,6 @@
 """Utilites for work with jwt separatly"""
 import os
 from time import time as current_time
-
 from flask_restful import reqparse
 import jwt
 
@@ -16,8 +15,10 @@ def jwt_validator(token: str) -> dict | ValueError:
         auth_type, token_value = token.split(" ")
         if auth_type != "Bearer":
             raise ValueError("Authorization type must be Bearer")
+
     except ValueError as exc:
         raise ValueError("Token must have '<auth_type> <token_value>' format") from exc
+    
     try:
         payload = jwt.decode(
             token_value,
@@ -47,7 +48,7 @@ WEEK_IN_SECONDS = 60 * 60 * 24 * 7
 def create_access_token(
         payload: dict, 
         time: int = current_time() + WEEK_IN_SECONDS,
-        secret_key: str = os.getenv("APP_SECRET_KEY")
+        secret_key: str = os.getenv("APP_SECRET_KEY") or "uityerf78tg78#@$4dsd7y4q"  # УДАЛИТЬ НА ПРОДЕ ЭТУ ШИЗУ
         ) -> str:
     """
     generate jwt token 

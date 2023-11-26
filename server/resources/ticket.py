@@ -1,7 +1,8 @@
 from flask_restful import Resource
+from flask import request
 
 from models import *
-from .utils.parsers import get_ticket_parser, post_ticket_parser
+from .utils.parsers import post_ticket_parser
 from .utils.__jwt__ import jwt_required
 
 
@@ -10,8 +11,13 @@ class Ticket(Resource):
 
     @classmethod
     def get(cls):
-        args = get_ticket_parser.parse_args()
-        id = args.get('id')
+        params = request.args
+        if not params.get('id'):
+            return {'message': "Ticket ID is required param"}, 400
+        
+        ticket = TicketModel.get_by_id(params['id'])
+        if not ticket:
+            return {'message': 'Ticket not found'}, 404
         return Ticket.get_by_id(id)
 
     @classmethod
@@ -22,7 +28,7 @@ class Ticket(Resource):
 
         args = post_ticket_parser.parse_args()
         ticket = Ticket.create(
-            teacher_id  = args.get('teacher_id'),
+            teacher_id  = payload.get('id'),
             title       = args.get('title'),
             subtitle    = args.get('subtitle'),
             description = args.get('description'),
@@ -33,6 +39,10 @@ class Ticket(Resource):
     @classmethod
     def put(cls):
         pass
+
+    @classmethod
+    def patch(cls):
+        pass    
 
     @classmethod
     def delete(cls):
