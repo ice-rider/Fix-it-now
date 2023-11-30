@@ -1,18 +1,17 @@
 import { useState } from "react";
 
-export default function LazyLoading({ boxStyle, bigImg, previewImg, imgStyle, blur=1 }) {
+export default function LazyLoading(props) {
   const [isLoadedBig, setIsLoadedBig] = useState(false);
   return (
-    <div style={{ ...boxStyle, position: "relative" }}>
+    <div style={{ ...props.boxStyle, position: "relative" }}>
       <img
-        src={bigImg}
+        src={props.bigImg}
         alt="big img"
         style={{
-          ...imgStyle,
+          ...props.imgStyle,
           width: "100%",
           height: "100%",
-          opacity: isLoadedBig ? "1" : "0",
-          borderRadius: "50%"
+          opacity: isLoadedBig ? "1" : "0"
         }}
         onLoad={() => {
           if(isLoadedBig) return
@@ -20,18 +19,17 @@ export default function LazyLoading({ boxStyle, bigImg, previewImg, imgStyle, bl
         }}
       />
           <img
-        src={previewImg}
+        src={props.previewImg}
         alt="preview"
         style={{
-          ...imgStyle,
+          ...props.imgStyle,
           position: "absolute",
           display: isLoadedBig ? "none" : "",
           width: "100%",
           height: "100%",
           left: "0",
           top: "0",
-          filter: `blur(${blur}px)`,
-          borderRadius: "50%"
+          filter: "blur(1px)",
         }}
       />
     </div>
