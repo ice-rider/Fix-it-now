@@ -52,8 +52,13 @@ class UserModel(db.Model):
     @classmethod
     def auth(cls, login, password):
         user = cls.query.filter_by(login=login).first()
-        if user and pbkdf2_sha256.verify(password, user.password):
+        
+        if not user:
+            raise ValueError("User not found")
+
+        if pbkdf2_sha256.verify(password, user.password):
             return user
+        
     
     @classmethod
     def get_by_id(cls, id):

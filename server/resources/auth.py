@@ -13,7 +13,10 @@ class Auth(Resource):
     def post(cls):
         args = auth_parser.parse_args()
         login, password = args["login"], args["password"]
-        user = UserModel.auth(login, password)
+        try:
+            user = UserModel.auth(login, password)
+        except ValueError:
+            return {'message': 'User not found'}, 404
         
         if not user:
             return {'message': 'Invalid credentials'}, 401
@@ -31,5 +34,6 @@ class Auth(Resource):
         session.token = access_token
         session.save()
         return {
-            "access_token": access_token
+            "access_token": access_token,
+            "user": user.json()
         }, 200
