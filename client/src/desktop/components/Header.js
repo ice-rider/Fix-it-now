@@ -1,36 +1,24 @@
-import LazyLoading from "./LazyLoadingImage";
-
-import styled from "@emotion/styled"
-import { Button, Typography, Avatar, List, ListItemButton, Divider, Popover } from "@mui/material"
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Typography, List, ListItemButton, Divider, Popover } from "@mui/material";
 import { red } from '@mui/material/colors';
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import LazyLoading from "./LazyLoadingImage";
+import { Data } from "../../App";
+import './Header.css';
 
-const HeaderBox = styled("div") ({
-    position: 'fixed', width: '100vw', height: '60px', zIndex: '5',
-    display: 'flex', justifyContent: 'space-between',
-    borderBottom: '2px solid #e1e1e1',
-    background: 'whitesmoke' // TODO: темы сделать надо и тут поменять
-})
-const LogoBox = styled("div") ({
-    position: 'relative',
-    top: '3px',
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: '30px',
-    cursor: "pointer"
-})
-const AuthButtonsWrapper = styled("div") ({
-    display: 'flex',
-    alignItems: 'center',
-    marginRight: '30px'
-})
-
-export default function Header () {
+// Header component
+export default function Header() {
+    const user = useContext(Data);
     const navigate = useNavigate();
+
+    console.log("Header load:", user)
+
     return (
-        <HeaderBox>
-            <LogoBox onClick={()=>{navigate('/')}}>
+        <div className="HeaderBox">
+            <div 
+                className="LogoBox" 
+                onClick={() => { navigate(user["auth"] ? "/dashboard" : "/") }}
+            >
                 <LazyLoading 
                     bigImg='/logo.png'
                     previewImg='/logo._min_.png'
@@ -43,84 +31,72 @@ export default function Header () {
                     }}
                 />
                 <Typography variant="h5">Fix it now</Typography>
-            </LogoBox>
-            <AuthBox />
-        </HeaderBox>
+            </div>
+            <AuthenticationBox />
+        </div>
     )
 }
 
-function AuthBox () {
-    const [isAuthed, setIsAuthed] = useState();
-    useEffect(() => {
-        const handleAuthValue = (auth) => {
-            return auth === "true"
-        }
-        setIsAuthed(
-            handleAuthValue(localStorage.auth)
-        );
+// Component for handling Authentication Box
+function AuthenticationBox() {
+    const { user } = useContext(Data);
 
-        const handleStorageChange = () => {
-            handleAuthValue(localStorage.auth)
-        }
-
-        window.addEventListener('storage', handleStorageChange)
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, [])
-    
     return (
         <>
-            {
-                isAuthed ?
-                <AccountButton />
+            { user["auth"] === true ?
+                <UserAccountButton />
                 :
-                <AuthButtonsWrapper>
-                    <LinkButton variant="contained" src="/login" label="Вход" />
-                </AuthButtonsWrapper>
+                <div className="AuthButtonsWrapper">
+                    <NavigationButton variant="contained" src="/login" label="Вход" />
+                </div>
             }
         </>
     )
 }
 
-function LinkButton (props) {
-    const navigate = useNavigate();
-    const { variant, src, label } = props;
-    return (
-        <Button
-            sx={{margin: '0 5px'}}
-            variant={variant} 
-            onClick={() => navigate(src)}
-        > {label} </Button>
-    )
-}
-
-const AccountButtonWrapper = styled("div") ({
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    cursor: "pointer",
-    padding: '0 30px',
-    ':hover': {
-        background: 'whitesmoke'
-    }
-})
-
-function AccountButton () {
+// Component for handling User Account Button
+function UserAccountButton() {
+    const { user } = useContext(Data);
+    const avatar = user["avatar"];
+    const username = user["username"];
+    
     const [isPopOver, setIsPopOver] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const avatar_link = localStorage.avatar;
-    const username = localStorage.username;
+    const closeMenu = () => { setIsPopOver(false) };
 
-    const closeMenu = () => { setIsPopOver(false) }
-
+    const defaultAvatars = {
+        male: [...Array(15)].map((_, i) => `men${i+1}`),
+        female: [...Array(8)].map((_, i) => `women${i+1}`)
+    }
+    const makeAvatar = () => defaultImgNmb <= 15 ? 
+        `/avatars/men${defaultImgNmb}.png` : `/avatars/women${defaultImgNmb-15}.png`
+    
+    const makePrevAvatar = () => defaultImgNmb <= 15 ? 
+        `/avatars/men${defaultImgNmb}.blur.png` : `/avatars/women${defaultImgNmb-15}.blur.png`
+    
     return (
         <>
-            <AccountButtonWrapper onClick={(event)=>{ setAnchorEl(event.currentTarget); setIsPopOver(true); }}> 
-                <Avatar alt={username} src={avatar_link} sx={{ width: 35, height: 35, marginRight: '10px' }}/>
+            <div className="AccountButtonWrapper"
+                onClick={(event) => { 
+                    setAnchorEl(event.currentTarget); 
+                    setIsPopOver(true); // show popover
+                }}
+            >
+                <LazyLoading 
+                    alt={username}
+                    bigImg={avatar === "default" ? makeAvatar() : avatar}
+                    previewImg={avatar === "default" ? makePrevAvatar() : avatar}
+                    boxStyle={{
+                        position: 'relative',
+                        height: '40px',
+                        margin: '0 5px 5px 0',
+                        minWidth: '35px',
+                        borderRadius: '50%'
+                    }}
+                    blur={1}
+                />
                 <Typography variant="h6">{ username }</Typography>
-            </AccountButtonWrapper>
+            </div>
             <Popover
                 open={isPopOver}
                 anchorEl={anchorEl}
@@ -134,35 +110,56 @@ function AccountButton () {
                     horizontal: 'right',
                 }}
             >
-                <AccountMenu onClose={closeMenu} />
+                <UserAccountMenu onClose={closeMenu} />
             </Popover>
         </>
     )
 }
+const defaultImgNmb = Math.floor(Math.random() * (23)) + 1;
 
-
-function AccountMenu (props) {
-    const { onClose } = props;
+// Component for handling User Account Menu
+function UserAccountMenu({ onClose }) {
     const navigate = useNavigate();
 
-    const clickHandler = (url) => {
-        console.log(url)
+    const redirect = (url) => {
         navigate(url);
         onClose();
     }
 
-    const LinkButton = (props) => {
-        const { url, text, sx } = props;
-        return <ListItemButton onClick={()=>{ clickHandler(url) }} sx={sx}> {text} </ListItemButton>
+    const MenuItem = ({ url, text, warning = false }) => {
+        return (
+            <ListItemButton 
+                sx={warning ? { color: red[500] } : {}}
+                onClick={() => { redirect(url) }}
+            >
+                {text}
+            </ListItemButton>
+        )
     }
 
     return (
-        <List sx={{width: 200 }}>
-            <LinkButton url="/profile" text="Профиль" />
-            <LinkButton url="/settings" text="Настройки" />
-            <LinkButton url="/my-tickets" text="Мои заявки" />
+        <List sx={{ width: 200 }}>
+            <MenuItem url="/profile" text="Профиль" />
+            <MenuItem url="/settings" text="Настройки" />
+            <MenuItem url="/my-tickets" text="Мои заявки" />
             <Divider />
-            <LinkButton url="/logout" text="Выйти"  sx={{color: red[500]}} />
+            <MenuItem url="/logout" text="Выйти" warning />
         </List>
+    )
+}
+
+// Component for handling Navigation Button
+function NavigationButton(props) {
+    const navigate = useNavigate();
+    const { variant, src, label } = props;
+
+    return (
+        <Button
+            sx={{ margin: '0 5px' }}
+            variant={variant} 
+            onClick={() => navigate(src)}
+        >
+            {label}
+        </Button>
     )
 }
