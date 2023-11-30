@@ -1,7 +1,5 @@
 import { Typography } from '@mui/material';
 import styled from '@emotion/styled';
-import { UserData } from "../../App";
-import { useContext, useState } from "react";
 
 const Wrapper = styled("div") ({
     position: 'absolute',
@@ -13,12 +11,10 @@ const Wrapper = styled("div") ({
 })
 
 export default function MainPage () {
-    const userData = useContext(UserData);
-    const test = useState(userData["text"])
     return (
         <>
             <Wrapper>
-                <Typography variant="h4">Fix-It-Now {test}</Typography>
+                <Typography variant="h4">Fix-It-Now</Typography>
             </Wrapper>
         </>
         

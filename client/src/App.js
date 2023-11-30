@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { createContext, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -12,18 +13,35 @@ import LoginPage from './desktop/Pages/LoginPage';
 import NewTicketPage from './desktop/Pages/NewTicketPage';
 import DashboardPage from './desktop/Pages/DashboardPage';
 
-export const UserData = createContext(null);
+const Data = createContext(null);
 
 function App() {
+  const [data, setData] = useState({
+    auth: localStorage.getItem("auth") === "true" || false,
+    token: localStorage.getItem("access_token"),
+    avatar: localStorage.getItem("avatar"),
+    username: localStorage.getItem("username"),
+  })
+
+
   axios.defaults.baseURL = "https://humble-memory-r979x4w9g6x2vg-5050.app.github.dev/api";
   axios.defaults.headers.post['Content-Type'] = 'application/json';
+  
+  const setterWithObserver = (data) => {
+    setData({...data});
+    console.log("Observer: ", data);
+    localStorage.setItem("auth", data.auth);
+    localStorage.setItem("access_token", data.token);
+    localStorage.setItem("avatar", data.avatar);
+    localStorage.setItem("username", data.username);
+  }
 
   return (
     <>
       <BrowserView>
       <BrowserRouter>
         {/* desktop version */}
-        <UserData.Provider value={{text: 'test'}}>
+        <Data.Provider value={{user: data, setter: setterWithObserver}}>
           <Header />
           <Routes>
             <Route path='*' element={<MainPage />} />
@@ -31,7 +49,7 @@ function App() {
             <Route path="/new-ticket" element={<NewTicketPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
           </Routes>
-        </UserData.Provider>
+        </Data.Provider>
       </BrowserRouter>
       </BrowserView>
       
@@ -52,3 +70,4 @@ function App() {
 }
 
 export default App;
+export {Data};
