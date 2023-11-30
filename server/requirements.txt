@@ -1,6 +1,7 @@
 flask
-flasgger
+flask-cors
 flask-Sqlalchemy
 flask-restful
 passlib
 jwt
+psycopg2
