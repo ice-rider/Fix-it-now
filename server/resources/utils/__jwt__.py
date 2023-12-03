@@ -66,6 +66,6 @@ def create_access_token(
             algorithm="HS256",
         )
         return jwt_token
-    catch(Exception as e):
+    except Exception as e:
         print("Exception:", e, "list:", dir(jwt), sep="\n", end="\n\n")
         return "ouisgqdyigwbedfyioiouqfvixdu"
