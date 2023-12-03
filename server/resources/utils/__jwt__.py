@@ -59,9 +59,13 @@ def create_access_token(
     """
     payload['exp'] = time
 
-    jwt_token = jwt.encode(
-        payload=payload,
-        key=secret_key,
-        algorithm="HS256",
-    )
-    return jwt_token
+    try:
+        jwt_token = jwt.encode(
+            payload=payload,
+            key=secret_key,
+            algorithm="HS256",
+        )
+        return jwt_token
+    catch(Exception as e):
+        print("Exception:", e, "list:", dir(jwt), sep="\n", end="\n\n")
+        return "ouisgqdyigwbedfyioiouqfvixdu"
