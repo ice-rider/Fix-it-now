@@ -27,13 +27,11 @@ class UserModel(db.Model):
         :return: A dictionary containing the ID, username, role, and avatar of the object.
         :rtype: dict
         """
-        avatar = lambda id: (photo := UserPhotoModel.get_by_id(id)) and photo.json() or "default"
-
         return {
             "id": self.id,
             "username": self.username,
             "role": self.role.value,
-            "avatar": avatar(self.avatar_id)
+            "avatar": UserPhotoModel.get_by_id(self.avatar_id)
         }
     
     def secure_json(self):

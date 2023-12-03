@@ -21,4 +21,5 @@ with app.app_context():
 api.init_app(app)
 
 # run app on port 5050
-app.run(port="5050")
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port="5000")

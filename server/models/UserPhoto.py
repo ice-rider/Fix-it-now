@@ -31,4 +31,8 @@ class UserPhotoModel(db.Model):
         Returns:
             UserPhoto: The user photo object with the matching ID, or None if no matching photo is found.
         """
-        return cls.query.filter_by(id=id).first()
+        photo = cls.query.filter_by(id=id).first()
+        if photo:
+            return photo.json()
+        else:
+            return "default"
