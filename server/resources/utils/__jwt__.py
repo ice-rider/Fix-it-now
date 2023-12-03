@@ -5,7 +5,7 @@ from flask_restful import reqparse
 import jwt
 
 
-def jwt_validator(token: str) -> dict | ValueError:
+def jwt_validator(token: str):
     """
     validate token value and return payload or raise Exceptions optional
 
