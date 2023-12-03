@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_cors import CORS
-from flasgger import Swagger
 from models import db
 from db_init import initialize_database
 from resources import api
@@ -20,8 +19,6 @@ with app.app_context():
 
 # initialization app to api
 api.init_app(app)
-# initialization app to swagger
-swagger = Swagger(app)
 
 # run app on port 5050
 app.run(port="5050")
