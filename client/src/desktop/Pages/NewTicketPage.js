@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { toast } from "react-toastify";
 import { useEffect, useRef, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Divider, Button, TextField, Typography, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Divider, Button, TextField, Typography, Select, MenuItem, FormControl } from '@mui/material';
 import { Data } from '../../App'
 
 const Content = styled("div") ({
@@ -54,7 +54,7 @@ export default function NewTicketPage () {
             toast.error("Вы должны быть авторизованы для просмотра страницы");
             navigate("/login");
         }
-    }, [navigate])
+    }, [navigate, user.auth])
     
     const titleRef = useRef();
     const subtitleRef = useRef();
