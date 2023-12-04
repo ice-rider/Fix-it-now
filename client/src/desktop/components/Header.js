@@ -38,11 +38,15 @@ export default function Header() {
 // Component for handling Authentication Box
 function AuthenticationBox() {
     const { user } = useContext(Data);
+    const navigate = useNavigate();
 
     return (
         <>
             { user["auth"] === true ?
-                <UserAccountButton />
+                <div className="right-part">
+                    <Button variant="contained" onClick={ ()=>{navigate('/new-ticket')} }>Создать заявку</Button>
+                    <UserAccountButton />
+                </div>
                 :
                 <div className="AuthButtonsWrapper">
                     <NavigationButton variant="contained" src="/login" label="Вход" />

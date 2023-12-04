@@ -31,3 +31,13 @@
 .AccountButtonWrapper:hover {
   background-color: whitesmoke;
 }
+.right-part {
+  position: relative;
+  display: flex;
+  grid-template-columns: 1fr 1fr;
+  height: 40px;
+  column-gap: 1em;
+  top: 50%;
+  right: 1em;
+  transform: translateY(-50%);
+}
