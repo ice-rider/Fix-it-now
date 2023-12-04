@@ -24,7 +24,7 @@ function App() {
   })
 
 
-  axios.defaults.baseURL = "https://humble-memory-r979x4w9g6x2vg-5050.app.github.dev/api";
+  axios.defaults.baseURL = "https://fix-it-now-24.onrender.com/api";
   axios.defaults.headers.post['Content-Type'] = 'application/json';
   
   const setterWithObserver = (data) => {
