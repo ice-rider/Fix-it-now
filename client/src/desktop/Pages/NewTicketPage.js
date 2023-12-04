@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { toast } from "react-toastify";
 import { useEffect, useRef, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Divider, Button, TextField, Typography, Select, MenuItem, InputLabel, FormControl, Box } from '@mui/material';
+import { Divider, Button, TextField, Typography, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { Data } from '../../App'
 
 const Content = styled("div") ({
@@ -47,8 +47,8 @@ export default function NewTicketPage () {
     const { user } = useContext(Data);
 
     const [section, setSection] = useState('');
-    const [sectionList, setSectionList] = useState(["Сантехника", "Мебель", "Электричество", "Тыры", "Пыры"])
-
+    const [sectionList] = useState(["Сантехника", "Мебель", "Электричество", "Тыры", "Пыры"])
+        // setSectionList
     useEffect(() => {        
         if (user.auth !== true) {
             toast.error("Вы должны быть авторизованы для просмотра страницы");
@@ -130,32 +130,6 @@ export default function NewTicketPage () {
         </>
     )
 }
-
-
-function BasicSelect() {
-  const [age, setAge] = React.useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
-  return (
-      <FormControl fullWidth>
-        <InputLabel id="section-label">Age</InputLabel>
-        <Select
-          labelId="section-label"
-          id="asdfsadas"
-          value={age}
-          label="Age"
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-  );
-}
-
 
 function Uploader () {
     const [buttonList, setButtonList] = useState([]);
