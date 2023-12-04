@@ -11,8 +11,6 @@ export default function Header() {
     const user = useContext(Data);
     const navigate = useNavigate();
 
-    console.log("Header load:", user)
-
     return (
         <div className="HeaderBox">
             <div 
@@ -63,11 +61,6 @@ function UserAccountButton() {
     const [isPopOver, setIsPopOver] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const closeMenu = () => { setIsPopOver(false) };
-
-    const defaultAvatars = {
-        male: [...Array(15)].map((_, i) => `men${i+1}`),
-        female: [...Array(8)].map((_, i) => `women${i+1}`)
-    }
     const makeAvatar = () => defaultImgNmb <= 15 ? 
         `/avatars/men${defaultImgNmb}.png` : `/avatars/women${defaultImgNmb-15}.png`
     
