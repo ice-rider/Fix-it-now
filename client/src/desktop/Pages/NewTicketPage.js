@@ -18,6 +18,7 @@ const Content = styled("div") ({
     marginBottom: '125px',
     padding: '1.5em 2em',
     background: 'whitesmoke',
+    boxShadow: '0px 3px 8px 0px rgba(0, 0, 0, 0.3)',
     borderRadius: '1em',
     boxSizing: 'border-box'
 })
@@ -122,14 +123,11 @@ export default function NewTicketPage () {
 }
 
 function SectionSelect ({ section, setSection}) {
-    const [sectionList, setSectionList] = useState(["Сантехника", "Мебель", "Электричество", "Тыры", "Пыры"])
+    const [sectionList, setSectionList] = useState(["Сантехника", "Электрика", "..."])
     const [openSectionDialog, setOpenSectionDialog] = useState(false);
 
     const handleChange = (event) => {
-        if (!event.target) 
-            setSection(event)
-        
-        else if (event.target.value !== -1)
+        if (event.target.value !== -1)
             setSection(event.target.value);
     };
 
@@ -158,7 +156,7 @@ function SectionSelect ({ section, setSection}) {
             open={openSectionDialog} 
             onClose={(value) => {
                 setSectionList([...sectionList, value]);
-                handleChange(sectionList.length);
+                handleChange({ target: { value: value } });
                 setOpenSectionDialog(false);
             }}
             onCancel={() => {

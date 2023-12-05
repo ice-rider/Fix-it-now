@@ -85,8 +85,8 @@ function UserAccountButton() {
                     previewImg={avatar === "default" ? makePrevAvatar() : avatar}
                     boxStyle={{
                         position: 'relative',
-                        height: '40px',
-                        margin: '0 5px 5px 0',
+                        height: '35px',
+                        margin: '0 10px 0 0',
                         minWidth: '35px',
                         borderRadius: '50%'
                     }}
