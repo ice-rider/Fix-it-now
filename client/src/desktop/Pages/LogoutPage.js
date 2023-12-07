@@ -18,6 +18,7 @@ export default function LogoutPage () {
     return (
         <Content>
             <Typography>Вы уверены, что хотите выйти?</Typography>
+            <br /><br />
             <Button onClick={logout} variant="contained" color="error">Выйти</Button>
         </Content>
     )
