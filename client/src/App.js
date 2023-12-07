@@ -12,6 +12,7 @@ import MainPage from './desktop/Pages/MainPage';
 import LoginPage from './desktop/Pages/LoginPage';
 import NewTicketPage from './desktop/Pages/NewTicketPage';
 import DashboardPage from './desktop/Pages/DashboardPage';
+import LogoutPage from './desktop/Pages/LogoutPage';
 
 const Data = createContext(null);
 
@@ -48,6 +49,7 @@ function App() {
             <Route path='/login' element={<LoginPage />} />
             <Route path="/new-ticket" element={<NewTicketPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
           </Routes>
         </Data.Provider>
       </BrowserRouter>
