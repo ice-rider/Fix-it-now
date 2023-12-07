@@ -58,30 +58,19 @@ export default function NewTicketPage () {
             navigate("/login");
         }
     }, [navigate, user.auth])
-    
-    const titleRef = useRef();
+
     const descriptionRef = useRef();
     const locationRef = useRef();
 
     const createNewTicket = () => {
-        const title = titleRef.current.value;
         const description = descriptionRef.current.value;
         const location = locationRef.current.value;
-        
-        toast.error("А вот фигушки. я еще не допилил!")
-        toast.info(`title: ${title}`)
-        toast.info(`description: ${description}`)
-        toast.info(`location: ${location}`)
-        toast.info(`section: ${section}`)
 
         const photoInputList = document.querySelectorAll("#photo-input");
         for (let photoInput of photoInputList) {
             if (photoInput.files[0])
                 toast.info(`photo: ${photoInput.files[0].name}`)
         }
-
-        
-
     }
     return (
         <>
@@ -89,12 +78,8 @@ export default function NewTicketPage () {
                 <center><Typography variant='h4'>Создание новой заявки</Typography></center><br />
                 <Divider />
                 <FormGroup>
-                    <FormTitle text="Поломка" />
-                    <FormInput placeholder={'Введите название поломки'} inputRef={titleRef} />
-                </FormGroup>
-                <FormGroup>
                     <FormTitle text="Подробное описание" />
-                    <FormInput placeholder={'Введите подробное описание того что произошло'} multiline rows={4} inputRef={descriptionRef} />
+                    <FormInput placeholder={'Введите подробное описание неполадки, которую необходимо устранить'} multiline rows={4} inputRef={descriptionRef} />
                 </FormGroup>
                 <FormGroup>
                     <FormTitle text="Местонахождение" />
@@ -106,7 +91,7 @@ export default function NewTicketPage () {
                 </FormGroup>
                 <FormGroup>
                     <FormTitle text="Прикрепите фотографии" />
-                    <Uploader />
+                    <UploaderInput />
                 </FormGroup>
                 <FormGroup>
                     <Button 
@@ -123,7 +108,7 @@ export default function NewTicketPage () {
 }
 
 function SectionSelect ({ section, setSection}) {
-    const [sectionList, setSectionList] = useState(["Сантехника", "Электрика", "..."])
+    const [sectionList, setSectionList] = useState(["[ плотник ]", "Электрика", "...(?)"])
     const [openSectionDialog, setOpenSectionDialog] = useState(false);
 
     const handleChange = (event) => {
@@ -167,31 +152,12 @@ function SectionSelect ({ section, setSection}) {
   );
 }
 
-function Uploader () {
-    const [buttonList, setButtonList] = useState([]);
-    
-    const handleAddButton = () => {
-        setButtonList((prevButtons) => [
-            ...prevButtons, 
-            <UploaderInput emitSuccess={handleAddButton} />
-        ]);
-    }
-    
-    return (
-        <>
-            <UploaderInput emitSuccess={handleAddButton} />
-            {buttonList}
-        </>
-    )
-}
-
-function UploaderInput({ emitSuccess }) {
+function UploaderInput() {
     const [fileName, setFileName] = useState('');
     const handleFileChange = (event) => {
       const file = event.target.files[0];
       if (file) {
         setFileName(file.name);
-        emitSuccess();
       }
     };
   
