@@ -71,6 +71,8 @@ export default function NewTicketPage () {
             if (photoInput.files[0])
                 toast.info(`photo: ${photoInput.files[0].name}`)
         }
+        toast.info(description)
+        toast.info(location)
     }
     return (
         <>
