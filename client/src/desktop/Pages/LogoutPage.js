@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { toast } from 'react-toastify/dist/react-toastify';
+import { toast } from "react-toastify";
 import { styled } from '@mui/system';
 import { Data } from '../../App';
 import { Button, Typography } from '@mui/material';
