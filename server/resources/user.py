@@ -2,7 +2,6 @@ from flask_restful import Resource
 from flask import request
 
 from models import *
-from .utils.__jwt__ import jwt_required
 
 
 class User(Resource):

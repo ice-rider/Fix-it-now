@@ -1,7 +1,9 @@
 flask
-flask-cors
-flask-Sqlalchemy
-flask-restful
-passlib
-jwt
+flask-SQLAlchemy
 psycopg2
+flask-restful
+flask-cors
+flask-jwt-extended
+passlib
+python-dotenv
+requests

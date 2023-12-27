@@ -5,7 +5,7 @@ class FeedbackModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     worker_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    comment = db.Column(db.String(255))
+    comment = db.Column(db.String(500))
     rate = db.Column(db.Integer, default=0)
     fix_date = db.Column(db.DateTime)
 

@@ -16,19 +16,17 @@ auth_parser.add_argument('password', type=str, required=True, help="This field c
 
 post_ticket_parser = reqparse.RequestParser()
 post_ticket_parser.add_argument('teacher_id',  type=int, required=True, help="This field cannot be blank.", location="json")
-post_ticket_parser.add_argument('title',       type=str, required=True, help="This field cannot be blank.", location="json")
-post_ticket_parser.add_argument('subtitle',    type=str, required=True, help="This field cannot be blank.", location="json")
 post_ticket_parser.add_argument('description', type=str, required=True, help="This field cannot be blank.", location="json")
 post_ticket_parser.add_argument('location',    type=str, required=True, help="This field cannot be blank.", location="json")
+post_ticket_parser.add_argument('photo',       type=str, required=False, help="This field cannot be blank.", location="json")
 """
     This parser is used to parse the post ticket request data.
 
     Parameters:
-    - teacher_id (int): The id of the teacher.
-    - title (str): The title of the ticket.
-    - subtitle (str): The subtitle of the ticket.
+    - teacher_id (int): The id of the teacher..
     - description (str): The description of the ticket.
     - location (str): The location of the ticket.
+    - photo (str): The photo of the ticket.
 
     Returns:
     - argparse.Namespace: The parsed arguments.

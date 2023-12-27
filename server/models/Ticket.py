@@ -11,27 +11,26 @@ class TicketModel(db.Model):
     __tablename__ = "ticket"
 
     id = db.Column(db.Integer, primary_key=True)
-    teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    title = db.Column(db.String(255))
-    subtitle = db.Column(db.String(255))
-    description = db.Column(db.String(255))
-    location = db.Column(db.String(255))
+    teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    worker_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    description = db.Column(db.String(500))
+    location = db.Column(db.String(100))
     status = db.Column(db.Enum(TicketStatus), default=TicketStatus.OPEN)
+    photo = db.Column(db.String, default="no-photo")
 
     def json(self):
         return {
             "id": self.id,
             "teacher_id": self.teacher_id,
-            "title": self.title,
-            "subtitle": self.subtitle,
+            "worker_id": self.worker_id,
             "description": self.description,
             "location": self.location,
-            "status": self.status,
-            "photos": [photo.json() for photo in TicketPhoto.get_by_ticket_id(self.id)]
+            "status": self.status.value
         }
 
-    def get_by_id(id):
-        return Ticket.query.filter_by(id=id).first()
+    @classmethod
+    def get_by_id(cls, id):
+        return cls.query.filter_by(id=id).first()
     
     def patch(self, title: str, subtitle: str, description: str, location: str):
         if title:
@@ -44,4 +43,4 @@ class TicketModel(db.Model):
             self.location = location
 
     def set_status(self, status: str):
-        self.status = status
+        self.status = TicketStatus(status)

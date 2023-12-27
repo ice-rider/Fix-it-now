@@ -5,14 +5,12 @@ class SessionModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    token = db.Column(db.String(255))
     blocked = db.Column(db.Boolean, default=False)
 
     def json(self):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "token": self.token,
             "blocked": self.blocked
         }
     
@@ -22,3 +20,8 @@ class SessionModel(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+    @classmethod
+    def is_token_blocked(cls, session_id):
+        session = cls.query.filter_by(id=session_id, blocked=True).first()
+        return session.blocked
