@@ -29,6 +29,10 @@ class TicketModel(db.Model):
         }
 
     @classmethod
+    def get_all(cls):
+        return cls.query.all()
+
+    @classmethod
     def get_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
     
