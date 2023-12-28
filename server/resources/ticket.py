@@ -63,3 +63,16 @@ class Ticket(Resource):
     @classmethod
     def delete(cls):
         pass
+
+
+class TicketList(Resource):
+    path = "/ticket-list"
+
+    @classmethod
+    def get(cls):
+        tickets = TicketModel.get_all()
+        
+        if not tickets:
+            return {"message": "tickets not found"}, 404
+
+        return {"ticket_list": [t.json() for t in tickets]}, 200
