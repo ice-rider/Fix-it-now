@@ -7,31 +7,35 @@ import { List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 export default function DashboardPage () {
     const [data, setData] = useState([]);
+    const [hasResponse, setHasResponse] = useState(false);
     
-    axios.get('/ticket-list')
-    .then((response) => {
-        setData(response.data.ticket_list)
-    })
-    .catch((error) => {
-        toast.error(error)
-    })
+    useEffect(() => {
+        axios.get('/ticket-list')
+        .then((response) => {
+            setData(response.data.ticket_list);
+            setHasResponse(true);
+        })
+        .catch((error) => {
+            toast.error(error)
+        })
+    }, [])
+    
 
-    return (
-        <>
-            {
-                data ?
-                <List>
-                    { data.map((ticket, index) => {
-                        return (<ListItem key={index}>
-                            <ListItemButton>
-                                <ListItemText primary={ticket.section + " | " + ticket.location} />
-                            </ListItemButton>
-                        </ListItem>)
-                    })}
-                </List>
-                :
-                <p>Problems not found</p>
-            }
-        </>
+    return hasResponse ? (
+        data.length > 0 ? (
+            <List>
+                {data.map((ticket, index) => (
+                    <ListItem key={index}>
+                        <ListItemButton>
+                            <ListItemText primary={`${ticket.section} | ${ticket.location}`} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        ) : (
+            <p>Problems not found</p>
+        )
+    ) : (
+        <p>Loading...</p>
     );
 }
