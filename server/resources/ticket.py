@@ -55,6 +55,7 @@ class Ticket(Resource):
             location    = args.get('location'),
             photo       = photo_url
         )
+        ticket.save()
         return {"ticket": ticket.json()}, 201
 
     @classmethod
