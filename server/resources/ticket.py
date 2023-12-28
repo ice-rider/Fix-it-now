@@ -47,7 +47,7 @@ class Ticket(Resource):
                 photo_url = current_app.get('CDN_URL') + response.json.get('id')
 
         # create ticket
-        ticket = Ticket.create(
+        ticket = TicketModel(
             teacher_id  = payload.get('id'),
             worker_id   = None,
             section     = args.get('section'),
