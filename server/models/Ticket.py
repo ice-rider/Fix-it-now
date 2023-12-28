@@ -11,6 +11,7 @@ class TicketModel(db.Model):
     __tablename__ = "ticket"
 
     id = db.Column(db.Integer, primary_key=True)
+    section = db.Column(db.String)
     teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     worker_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     description = db.Column(db.String(500))
@@ -21,6 +22,7 @@ class TicketModel(db.Model):
     def json(self):
         return {
             "id": self.id,
+            "section": self.section,
             "teacher_id": self.teacher_id,
             "worker_id": self.worker_id,
             "description": self.description,
@@ -35,16 +37,6 @@ class TicketModel(db.Model):
     @classmethod
     def get_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
-    
-    def patch(self, title: str, subtitle: str, description: str, location: str):
-        if title:
-            self.title = title
-        if subtitle:
-            self.subtitle = subtitle
-        if description:
-            self.description = description
-        if location:
-            self.location = location
 
     def set_status(self, status: str):
         self.status = TicketStatus(status)
