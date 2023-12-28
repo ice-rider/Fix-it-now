@@ -8,7 +8,7 @@ import { List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 export default function DashboardPage () {
     const [data, setData] = useState([]);
     const [hasResponse, setHasResponse] = useState(false);
-    
+    console.log("!")
     useEffect(() => {
         axios.get('/ticket-list')
         .then((response) => {
