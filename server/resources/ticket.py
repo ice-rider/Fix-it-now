@@ -50,6 +50,7 @@ class Ticket(Resource):
         ticket = Ticket.create(
             teacher_id  = payload.get('id'),
             worker_id   = None,
+            section     = args.get('section'),
             description = args.get('description'),
             location    = args.get('location'),
             photo       = photo_url
