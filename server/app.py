@@ -23,7 +23,7 @@ app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 @jwt.token_in_blocklist_loader
 def check_if_token_revoked(jwt_header, jwt_payload):
     print(jwt_payload)
-    session_id = jwt_payload["session_id"]
+    session_id = jwt_payload["sub"]["session_id"]
     return Session.is_token_blocked(session_id)
 
 # configure database
