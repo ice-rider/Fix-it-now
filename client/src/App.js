@@ -27,6 +27,7 @@ function App() {
 
   axios.defaults.baseURL = "https://fix-it-now-24-8go9.onrender.com/api";
   axios.defaults.headers.post['Content-Type'] = 'application/json';
+  axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
   
   const setterWithObserver = (data) => {
     setData({...data});
