@@ -7,3 +7,4 @@ flask-jwt-extended
 passlib
 python-dotenv
 requests
+gunicorn
