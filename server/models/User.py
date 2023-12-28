@@ -49,7 +49,7 @@ class UserModel(db.Model):
 
     @classmethod
     def auth(cls, login, password):
-        user = cls.query.filter_by(login=login).get_or_404()
+        user = cls.query.filter_by(login=login).first()
 
         if not user:
             abort(404, "User not found")
