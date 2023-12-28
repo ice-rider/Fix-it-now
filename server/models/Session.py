@@ -24,4 +24,8 @@ class SessionModel(db.Model):
     @classmethod
     def is_token_blocked(cls, session_id):
         session = cls.query.filter_by(id=session_id, blocked=True).first()
+
+        if not session:
+            return False
+
         return session.blocked
