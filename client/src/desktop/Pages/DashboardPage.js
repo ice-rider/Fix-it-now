@@ -22,11 +22,11 @@ export default function DashboardPage () {
                 data ?
                 <List>
                     { data.map((ticket, index) => {
-                        <ListItem key={index}>
+                        return (<ListItem key={index}>
                             <ListItemButton>
                                 <ListItemText primary={ticket.section + " | " + ticket.location} />
                             </ListItemButton>
-                        </ListItem>
+                        </ListItem>)
                     })}
                 </List>
                 :
