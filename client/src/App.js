@@ -25,7 +25,7 @@ function App() {
   })
 
 
-  axios.defaults.baseURL = "https://fix-it-now-24.onrender.com/api";
+  axios.defaults.baseURL = "https://fix-it-now-24-8go9.onrender.com/api";
   axios.defaults.headers.post['Content-Type'] = 'application/json';
   
   const setterWithObserver = (data) => {

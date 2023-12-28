@@ -66,13 +66,18 @@ export default function NewTicketPage () {
         const description = descriptionRef.current.value;
         const location = locationRef.current.value;
 
-        const photoInputList = document.querySelectorAll("#photo-input");
-        for (let photoInput of photoInputList) {
-            if (photoInput.files[0])
-                toast.info(`photo: ${photoInput.files[0].name}`)
-        }
-        toast.info(description)
-        toast.info(location)
+        const photoInput = document.querySelector("#photo-input");
+        
+        axios.post('/ticket', {
+            section: section,
+            description: description,
+            location: location,
+            photo: photoInput.files[0]
+        }).then((response) => {
+            toast.success('Успешно создано')
+        }).catch((error) => {
+            toast.error(error)
+        })
     }
     return (
         <>
@@ -80,16 +85,16 @@ export default function NewTicketPage () {
                 <center><Typography variant='h4'>Создание новой заявки</Typography></center><br />
                 <Divider />
                 <FormGroup>
+                    <FormTitle text="Тип поломки" />
+                    <SectionSelect section={section} setSection={setSection}/>
+                </FormGroup>
+                <FormGroup>
                     <FormTitle text="Подробное описание" />
                     <FormInput placeholder={'Введите подробное описание неполадки, которую необходимо устранить'} multiline rows={4} inputRef={descriptionRef} />
                 </FormGroup>
                 <FormGroup>
                     <FormTitle text="Местонахождение" />
                     <FormInput placeholder={'Номер кабинета или конкретное место'} inputRef={locationRef} />
-                </FormGroup>
-                <FormGroup>
-                    <FormTitle text="Тип поломки" />
-                    <SectionSelect section={section} setSection={setSection}/>
                 </FormGroup>
                 <FormGroup>
                     <FormTitle text="Прикрепите фотографии" />
