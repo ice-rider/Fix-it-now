@@ -18,6 +18,7 @@ load_dotenv()
 
 # create jwt manager object for configuring app with jwt
 jwt = JWTManager(app)
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
 @jwt.token_in_blocklist_loader
 def check_if_token_revoked(jwt_header, jwt_payload):
