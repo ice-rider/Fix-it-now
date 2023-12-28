@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 
-from models import db, Session
+from models import db, SessionModel
 from db_init import initialize_database
 from resources import api
 
@@ -24,7 +24,7 @@ app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 def check_if_token_revoked(jwt_header, jwt_payload):
     print(jwt_payload)
     session_id = jwt_payload["sub"]["session_id"]
-    return Session.is_token_blocked(session_id)
+    return SessionModel.is_token_blocked(session_id)
 
 # configure database
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('PRODUCTION_DATABASE_URI')
