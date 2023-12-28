@@ -15,7 +15,6 @@ auth_parser.add_argument('password', type=str, required=True, help="This field c
 """
 
 post_ticket_parser = reqparse.RequestParser()
-post_ticket_parser.add_argument('teacher_id',  type=int, required=True, help="This field cannot be blank.", location="json")
 post_ticket_parser.add_argument('description', type=str, required=True, help="This field cannot be blank.", location="json")
 post_ticket_parser.add_argument('section',     type=str, required=Truw, help="This field cannot be blank.", location="json")
 post_ticket_parser.add_argument('location',    type=str, required=True, help="This field cannot be blank.", location="json")
