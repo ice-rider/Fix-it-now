@@ -1,10 +1,8 @@
 import styled from "@emotion/styled";
 import { Button, Divider, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import { useRef, useContext } from "react";
+import { useRef } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { Data } from "../../App";
 
 const Content = styled("div") ({
     position: 'absolute',
@@ -30,36 +28,31 @@ const FormBox = styled("div") ({
 })
 
 export default function LoginPage () {
-    const navigate = useNavigate();
-    const { user, setter } = useContext(Data);
     const inputLogin = useRef(null);
     const inputPassword = useRef(null);
 
     const auth = async () => {
         const login = inputLogin.current.value;
         const password = inputPassword.current.value;
-
-        if (login.trim() === "" || password.trim() === "") {
-            toast.error("Логин или пароль не заполнены корректно.");
-            return;
-        }
-
+        console.log('values: ', login, ', ', password)
         try {
             const response = await axios.post('/auth', {login: login, password: password});
-            toast.success(responses[200]);
-            setter({
-                ...user,
-                token: response.data.access_token,
-                auth: true, 
-                username: response.data.user.username, 
-                avatar: response.data.user.avatar
-            });
-            navigate('/dashboard');
+            toast.success('Успешная авторизация. Перенаправление...')
+            localStorage.auth = true;
+            localStorage.token = response.data.token;
+            // TODO: realise request for user.json data by jwt token
         } catch (error) {
-            toast.error(
-                error.reponse && error.response.status ? 
-                responses[error.response.status] : responses.custom(error)
-            );
+            if (error.response)
+                if (error.response.status === 401)
+                    toast.error("Неверные логин и/или пароль")
+                else {
+                    toast.error("Неизвестная ошибка. Попробуйте позже");
+                    axios.post('/backlog', {code: error.response.status, error: error.response.data, type: 'response'})
+                }
+            else {
+                console.log("Внутренняя ошибка сайта. Попробуйте позже", error);
+                axios.post('/backlog', {error: error, type: 'request'})
+            }
         }
     }
     
@@ -87,12 +80,4 @@ export default function LoginPage () {
             </FormBox>
         </Content>
     );
-}
-
-const responses = {
-    custom: (error) => `Внутренняя ошибка сайта. ${error}`,
-    200: "Успешная авторизация. Перенаправление...",
-    401: "Неверные логин и/или пароль",
-    404: "Пользователь не зарегестрирован",
-    500: "Неизвестная ошибка. Попробуйте позже"
 }
