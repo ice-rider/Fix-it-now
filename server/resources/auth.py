@@ -1,7 +1,6 @@
-from flask_restful import Resource
-
+from flask import request
+from flask_restful_api import Resource
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from .utils.parsers import auth_parser
 from models import *
 
 
@@ -10,9 +9,12 @@ class Auth(Resource):
 
     @classmethod
     def post(cls):
-        args = auth_parser.parse_args()
+        args = request.json
         login, password = args["login"], args["password"]
 
+        if not login or not password:
+            return {"message": "Login and password are required"}, 400
+        
         user = UserModel.auth(login, password)
 
         session = SessionModel(user_id=user.id)

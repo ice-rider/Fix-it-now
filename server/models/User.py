@@ -51,7 +51,7 @@ class UserModel(db.Model):
     def auth(cls, login, password):
         user = cls.query.filter_by(login=login).first()
 
-        if not user:
+        if user is None:
             abort(404, "User not found")
 
         if pbkdf2_sha256.verify(password, user.password):

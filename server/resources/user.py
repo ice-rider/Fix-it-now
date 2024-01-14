@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from flask_restful_api import Resource
 from flask import request
 
 from models import *
@@ -21,11 +21,19 @@ class User(Resource):
         return {'message': 'Create user'}, 201
 
     def patch(self):
-        # Логика для обновления данных пользователя
         return {'message': 'Update user'}, 200
 
     def delete(self):
-        # Логика для удаления пользователя
         return {'message': 'Delete user'}, 200
 
 
+class UserByID(Resource):
+    path = "/user/<int:id>"
+
+    def get(self, id):
+        user = UserModel.get_by_id(id)
+
+        if not user:
+            return {'message': 'User not found'}, 404
+        
+        return user.json(), 200
