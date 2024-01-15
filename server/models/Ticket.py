@@ -27,7 +27,8 @@ class TicketModel(db.Model):
             "worker_id": self.worker_id,
             "description": self.description,
             "location": self.location,
-            "status": self.status.value
+            "status": self.status.value,
+            "photo_url": self.photo
         }
 
     def save(self):
