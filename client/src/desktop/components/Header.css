@@ -1,0 +1,59 @@
+.HeaderBox {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 60px;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #e1e1e1;
+  background: whitesmoke;
+  z-index: 100;
+}
+.LogoBox {
+  position: relative;
+  top: 3px;
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+  cursor: pointer ;
+}
+.AuthButtonsWrapper {
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+}
+.AccountButtonWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+.right-part {
+  position: relative;
+  display: flex;
+  grid-template-columns: 1fr 1fr;
+  height: 38px;
+  column-gap: 1em;
+  top: 50%;
+  right: 1em;
+  transform: translateY(-50%);
+}
+html::-webkit-scrollbar {
+	width: 16px;
+	background-color: transparent;
+}
+html::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border: 5px solid transparent;
+  background-clip: content-box;
+  border-radius: 25px;
+  z-index: 5;
+}
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}
+html::-webkit-scrollbar-thumb:active {
+  background-color: #666;
+}

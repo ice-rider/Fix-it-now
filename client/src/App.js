@@ -1,5 +1,6 @@
+import React from 'react';
 import axios from 'axios';
-
+import { createContext, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { BrowserView } from 'react-device-detect';
 import { ToastContainer } from 'react-toastify';
@@ -10,22 +11,48 @@ import Header from './desktop/components/Header';
 import MainPage from './desktop/Pages/MainPage';
 import LoginPage from './desktop/Pages/LoginPage';
 import NewTicketPage from './desktop/Pages/NewTicketPage';
+import DashboardPage from './desktop/Pages/DashboardPage';
+import LogoutPage from './desktop/Pages/LogoutPage';
+
+const Data = createContext(null);
 
 function App() {
-  axios.defaults.baseURL = "https://fix-it-now-24.onrender.com/api";
+  const [data, setData] = useState({
+    auth: localStorage.getItem("auth") === "true" || false,
+    token: localStorage.getItem("access_token"),
+    avatar: localStorage.getItem("avatar"),
+    username: localStorage.getItem("username"),
+  })
+
+
+  axios.defaults.baseURL = "https://fix-it-now-24-8go9.onrender.com/api";
   axios.defaults.headers.post['Content-Type'] = 'application/json';
+  axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
+  
+  const setterWithObserver = (data) => {
+    setData({...data});
+    console.log("Observer: ", data);
+    localStorage.setItem("auth", data.auth);
+    localStorage.setItem("access_token", data.token);
+    localStorage.setItem("avatar", data.avatar);
+    localStorage.setItem("username", data.username);
+  }
 
   return (
     <>
       <BrowserView>
       <BrowserRouter>
         {/* desktop version */}
-        <Header />
-        <Routes>
-          <Route path='*' element={<MainPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path="/new-ticket" element={<NewTicketPage />} />
-        </Routes>
+        <Data.Provider value={{user: data, setter: setterWithObserver}}>
+          <Header />
+          <Routes>
+            <Route path='*' element={<MainPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path="/new-ticket" element={<NewTicketPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
+          </Routes>
+        </Data.Provider>
       </BrowserRouter>
       </BrowserView>
       
@@ -46,3 +73,4 @@ function App() {
 }
 
 export default App;
+export {Data};

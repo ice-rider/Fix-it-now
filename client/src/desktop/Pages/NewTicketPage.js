@@ -1,8 +1,16 @@
+import React from 'react';
 import styled from '@emotion/styled';
 import { toast } from "react-toastify";
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Divider, Button, TextField, Typography } from '@mui/material';
+import { 
+    Divider, Button, TextField, Typography, 
+    Select, MenuItem, FormControl, Dialog, 
+    DialogTitle, DialogContent, DialogActions 
+} from '@mui/material';
+import { Data } from '../../App'
+import axios from 'axios';
+
 
 const Content = styled("div") ({
     position: 'relative',
@@ -12,6 +20,7 @@ const Content = styled("div") ({
     marginBottom: '125px',
     padding: '1.5em 2em',
     background: 'whitesmoke',
+    boxShadow: '0px 3px 8px 0px rgba(0, 0, 0, 0.3)',
     borderRadius: '1em',
     boxSizing: 'border-box'
 })
@@ -41,35 +50,36 @@ const FormInput = ({placeholder, multiline, rows, inputRef}) => {
 }
 
 export default function NewTicketPage () {
+    const [section, setSection] = useState('');
     const navigate = useNavigate();
+    const { user } = useContext(Data);
 
     useEffect(() => {        
-        if (localStorage.auth !== "true") {
+        if (user.auth !== true) {
             toast.error("Вы должны быть авторизованы для просмотра страницы");
             navigate("/login");
         }
-    }, [navigate])
-    
+    }, [navigate, user.auth])
 
-    const titleRef = useRef();
-    const subtitleRef = useRef();
     const descriptionRef = useRef();
     const locationRef = useRef();
 
     const createNewTicket = () => {
-        const title = titleRef.current.value;
-        const subtitle = subtitleRef.current.value;
         const description = descriptionRef.current.value;
         const location = locationRef.current.value;
 
-        console.log(title, subtitle, description, location)
-
-        const photoInputList = document.querySelectorAll("#photo-input");
-        for (let photoInput of photoInputList) {
-            console.log(photoInput.files[0])
-        }
-
-        // TODO: realise sending data to server
+        const photoInput = document.querySelector("#photo-input");
+        
+        axios.post('/ticket', {
+            section: section,
+            description: description,
+            location: location,
+            photo: photoInput.files[0]
+        }).then((response) => {
+            toast.success('Успешно создано')
+        }).catch((error) => {
+            toast.error(error)
+        })
     }
     return (
         <>
@@ -77,16 +87,12 @@ export default function NewTicketPage () {
                 <center><Typography variant='h4'>Создание новой заявки</Typography></center><br />
                 <Divider />
                 <FormGroup>
-                    <FormTitle text="Название поломки" />
-                    <FormInput placeholder={'Введите краткое название поломки'} inputRef={titleRef} />
-                </FormGroup>
-                <FormGroup>
-                    <FormTitle text="Краткое описание" />
-                    <FormInput placeholder={'Краткое описание поломки (5-10 слов)'} inputRef={subtitleRef} />
+                    <FormTitle text="Тип поломки" />
+                    <SectionSelect section={section} setSection={setSection}/>
                 </FormGroup>
                 <FormGroup>
                     <FormTitle text="Подробное описание" />
-                    <FormInput placeholder={'Введите подробное описание того что произошло'} multiline rows={4} inputRef={descriptionRef} />
+                    <FormInput placeholder={'Введите подробное описание неполадки, которую необходимо устранить'} multiline rows={4} inputRef={descriptionRef} />
                 </FormGroup>
                 <FormGroup>
                     <FormTitle text="Местонахождение" />
@@ -94,48 +100,103 @@ export default function NewTicketPage () {
                 </FormGroup>
                 <FormGroup>
                     <FormTitle text="Прикрепите фотографии" />
-                    <Uploader />
+                    <UploaderInput />
                 </FormGroup>
                 <FormGroup>
-                    <Button variant='outlined' onClick={createNewTicket}>Создать</Button>
+                    <Button 
+                        variant='contained' 
+                        sx={{margin: '1em 5% 0', width: '90%'}} 
+                        onClick={createNewTicket}
+                    >
+                        Создать заявку
+                    </Button>
                 </FormGroup>
             </Content>
         </>
     )
 }
 
-function Uploader () {
-    const [buttonList, setButtonList] = useState([]);
-    
-    const handleAddButton = () => {
-        setButtonList((prevButtons) => [
-            ...prevButtons, 
-            <UploaderInput emitSuccess={handleAddButton} />
-        ]);
-    }
-    
-    return (
-        <>
-            <UploaderInput emitSuccess={handleAddButton}  />
-            {buttonList}
-        </>
-    )
+function SectionSelect ({ section, setSection}) {
+    const [sectionList, setSectionList] = useState(["[ плотник ]", "Электрика", "...(?)"])
+    const [openSectionDialog, setOpenSectionDialog] = useState(false);
+
+    const handleChange = (event) => {
+        if (event.target.value !== -1)
+            setSection(event.target.value);
+    };
+
+  return (
+    <>
+        <FormControl fullWidth>
+            <Select
+                id="demo-simple-select"
+                value={section}
+                onChange={handleChange}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
+            >
+                <MenuItem disabled value="">
+                    Выберите тип поломки
+                </MenuItem>
+                { 
+                    sectionList.map((section) => {
+                        return <MenuItem value={section}> {section} </MenuItem>
+                    })
+                }
+                <MenuItem onClick={()=>{setOpenSectionDialog(true);}} value={-1}>+ Добавить</MenuItem>
+            </Select>
+        </FormControl>
+        <NewSectionDialog
+            open={openSectionDialog} 
+            onClose={(value) => {
+                setSectionList([...sectionList, value]);
+                handleChange({ target: { value: value } });
+                setOpenSectionDialog(false);
+            }}
+            onCancel={() => {
+                setOpenSectionDialog(false);
+            }}
+        />
+    </>
+  );
 }
 
-function UploaderInput({ emitSuccess }) {
+function UploaderInput() {
     const [fileName, setFileName] = useState('');
     const handleFileChange = (event) => {
       const file = event.target.files[0];
       if (file) {
         setFileName(file.name);
-        emitSuccess();
       }
     };
   
     return (
-      <Button component="label" variant="contained">
+      <Button component="label" variant="outlined">
         { fileName ? `Прикреплено (${fileName})` : "Прикрепить файл" }
-        <VisuallyHiddenInput type="file" onChange={handleFileChange} id='photo-input'/>
+        <VisuallyHiddenInput type="file" accept="image/png, image/jpeg" onChange={handleFileChange} id='photo-input'/>
       </Button>
     );
+}
+
+function NewSectionDialog ({ open, onClose, onCancel }) {
+    const newSection = useRef();
+    const handleClose = () => {
+        onClose(newSection.current.value);
+    }
+
+    return (
+        <Dialog
+            open={open}
+            onClose={handleClose}
+        >
+            <DialogTitle>Введите новый тип поломки</DialogTitle>
+            <DialogContent>
+                <TextField inputRef={newSection} variant="outlined" />
+            </DialogContent>
+            <DialogActions>
+                <Button variant='text' onClick={onCancel}>Отменить</Button>
+                <Button variant='text' onClick={handleClose}>Добавить</Button>
+            </DialogActions>
+        </Dialog>
+    )
 }

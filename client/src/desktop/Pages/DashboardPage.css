@@ -1,0 +1,39 @@
+.DashboardPage {
+    position: relative;
+    top: 60px;
+    width: 40vw;
+    height: calc(100vh - 61px);
+    box-sizing: border-box;
+    background: whitesmoke;
+    overflow: hidden auto;
+}
+
+.TicketBox {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5em 1em;
+    margin: 10px;
+    box-sizing: border-box;
+    background: white;
+    user-select: none;
+    transition: 0.2s;
+}
+.TicketBox:hover {
+    background: #fefefe;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.4);
+    transform: scale(1.01);
+}
+.TicketBox:active {
+    background: #fcfcfc;
+    transform: scale(0.99);
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.4);
+}
+.Description {
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    margin: 0 1.5em 0 1em;
+}
