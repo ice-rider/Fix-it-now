@@ -1,0 +1,50 @@
+.TicketView {
+    box-sizing: border-box;
+    padding: 5vh 5vw;
+    background: white;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.TicketView[visible="closed"] close-btn-wrapper {
+    display: none;
+}
+
+.TicketPhotoWrapper {
+    width: 90%;
+    margin: 0 auto;
+    height: fit-content;
+}
+.TicketPhoto {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}
+.TicketInfo {
+    margin: 1em 0;
+}
+.TicketSection {
+    position: relative;
+    font-size: 1.5em;
+    font-weight: 600;
+    left: 5%;
+}
+.TicketDescription {
+    margin: 15px 0;
+    line-height: 1.1em;
+    letter-spacing: 5px;
+    background: whitesmoke;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.close-btn-wrapper {
+    color: white;
+    user-select: none;
+    cursor: pointer;
+    background: red;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border-radius: 15px;
+}

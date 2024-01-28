@@ -1,8 +1,11 @@
 import styled from "@emotion/styled";
 import { Button, Divider, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { Data } from "../../App";
+
 
 const Content = styled("div") ({
     position: 'absolute',
@@ -28,19 +31,30 @@ const FormBox = styled("div") ({
 })
 
 export default function LoginPage () {
+    const data = useContext(Data);
     const inputLogin = useRef(null);
     const inputPassword = useRef(null);
+    const navigate = useNavigate();
 
     const auth = async () => {
         const login = inputLogin.current.value;
         const password = inputPassword.current.value;
         console.log('values: ', login, ', ', password)
         try {
-            const response = await axios.post('/auth', {login: login, password: password});
-            toast.success('Успешная авторизация. Перенаправление...')
-            localStorage.auth = true;
-            localStorage.token = response.data.token;
-            // TODO: realise request for user.json data by jwt token
+            axios.post('/auth', {login: login, password: password})
+                .then(res => {
+                    console.log(res.data.access_token)
+                    data.setter({
+                        auth: true,
+                        access_token: res.data.access_token,
+                        avatar: res.data.user.avatar,
+                        username: res.data.user.username,
+                        user_id: res.data.user.id
+                    })
+                    console.log(data.user)
+                    navigate('/dashboard')
+                    toast.success('Успешная авторизация. Перенаправление...')
+                })
         } catch (error) {
             if (error.response)
                 if (error.response.status === 401)
