@@ -27,12 +27,12 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     return SessionModel.is_token_blocked(session_id)
 
 # configure database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('PRODUCTION_DATABASE_URI')
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DEVELOPMENT_DATABASE_URI')  # PRODUCTION_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
 
 # configure cdn url
-app.config["CDN_URL"] = os.getenv('CDN_URL')
+app.config["CDN_URL"] = os.getenv('DEVELOPMENT_CDN_URL')  # PRODUCTION_CDN_URL
 
 # initialization app to database and creating superuser
 db.init_app(app)

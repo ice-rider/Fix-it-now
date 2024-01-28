@@ -6,8 +6,8 @@ from models import *
 
 class User(Resource):
     path = "/user"
-
-    def get(self):
+    @classmethod
+    def get(cls):
         params = request.args
         if not params.get('id'):
             return {'message': "User ID is required param"}, 400
@@ -30,7 +30,8 @@ class User(Resource):
 class UserByID(Resource):
     path = "/user/<int:id>"
 
-    def get(self, id):
+    @classmethod
+    def get(cls, id):
         user = UserModel.get_by_id(id)
 
         if not user:
