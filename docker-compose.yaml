@@ -1,0 +1,41 @@
+version: '3'
+services:    
+  database:
+    container_name: database
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  server:
+    build: ./server
+    container_name: backend
+    environment:
+      - DATABASE_URI=postgresql://postgres:postgres@database:5432/postgres
+      - JWT_SECRET_KEY=ijcicjh;IHW;OIH:oihaoih
+    restart: on-failure
+    volumes:
+      - ./server:/server
+    ports:
+      - "5000:5000"
+    command: flask run --host=0.0.0.0 --port=5000
+    depends_on:
+      - database
+
+  client:
+    build: ./client
+    container_name: client
+    restart: on-failure
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+
+
+volumes:
+  pgdata: {}
