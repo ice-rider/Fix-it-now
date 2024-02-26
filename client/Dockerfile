@@ -12,5 +12,3 @@ COPY . .
 ENV INLINE_RUNTIME_CHUNK=false
 
 RUN npm run build
-
-RUN npm install -g serve

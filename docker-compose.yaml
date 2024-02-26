@@ -23,7 +23,7 @@ services:
       - ./server:/server
     ports:
       - "5000:5000"
-    command: flask run --host=0.0.0.0 --port=5000
+    command: gunicorn app:app --host=localhost:5000
     depends_on:
       - database
 
@@ -33,6 +33,7 @@ services:
     restart: on-failure
     ports:
       - "3000:3000"
+    command: npm install -g serve
     depends_on:
       - server
 
