@@ -1,6 +1,10 @@
 flask
-flasgger
-flask-Sqlalchemy
-flask-restful
+flask-SQLAlchemy
+psycopg2
+flask-restful-api
+flask-cors
+flask-jwt-extended
 passlib
-jwt
+python-dotenv
+requests
+gunicorn
