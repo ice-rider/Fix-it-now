@@ -1,10 +1,6 @@
-from .db import db
+from .db import *
 
-from .Session import Session
-from .User import User
-from .Ticket import Ticket
-from .Feedback import Feedback
-
-from .UserPhoto import UserPhoto
-from .TicketPhoto import TicketPhoto
-from .Photo import Photo
+from .User import *
+from .Ticket import *
+from .Session import *
+from .Feedback import *
