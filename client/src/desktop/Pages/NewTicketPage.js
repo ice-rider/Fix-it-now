@@ -50,6 +50,9 @@ const FormInput = ({placeholder, multiline, rows, inputRef}) => {
 }
 
 export default function NewTicketPage () {
+    const [loadingPhoto, setLoadingPhoto] = useState(false);
+    const [hasRequest, setHasRequest] = useState(false);
+    const [b64Image, setB64Image] = useState(null);
     const [section, setSection] = useState('');
     const navigate = useNavigate();
     const { user } = useContext(Data);
@@ -59,7 +62,8 @@ export default function NewTicketPage () {
             toast.error("Вы должны быть авторизованы для просмотра страницы");
             navigate("/login");
         }
-    }, [navigate, user.auth])
+        console.log(user)
+    }, [navigate, user])
 
     const descriptionRef = useRef();
     const locationRef = useRef();
@@ -67,18 +71,22 @@ export default function NewTicketPage () {
     const createNewTicket = () => {
         const description = descriptionRef.current.value;
         const location = locationRef.current.value;
-
-        const photoInput = document.querySelector("#photo-input");
-        
-        axios.post('/ticket', {
+        var body = {
             section: section,
             description: description,
             location: location,
-            photo: photoInput.files[0]
-        }).then((response) => {
-            toast.success('Успешно создано')
+        }
+        b64Image && (body.image = b64Image);
+
+        setHasRequest(true);
+        toast.info('Send request')
+        axios.post('/ticket', body).then((response) => {
+            toast.success('Успешно создано. Переадресация...')
+            setHasRequest(false);
+            navigate('/dashboard')
         }).catch((error) => {
-            toast.error(error)
+            toast.error("Что то пошло не так, попробуйте позже");
+            setHasRequest(false);
         })
     }
     return (
@@ -100,13 +108,25 @@ export default function NewTicketPage () {
                 </FormGroup>
                 <FormGroup>
                     <FormTitle text="Прикрепите фотографии" />
-                    <UploaderInput />
+                    <UploaderInput 
+                        onChange= {(file) => {
+                            toast.info("Uploading image...")
+                            setLoadingPhoto(true)
+                            var reader = new FileReader();
+                            reader.onload = function () {
+                                setLoadingPhoto(false);
+                                toast.success("Photo successfully uploaded")
+                                setB64Image(reader.result)
+                            }
+                            reader.readAsDataURL(file);
+                        }} />
                 </FormGroup>
                 <FormGroup>
                     <Button 
                         variant='contained' 
                         sx={{margin: '1em 5% 0', width: '90%'}} 
                         onClick={createNewTicket}
+                        disabled={loadingPhoto || hasRequest}
                     >
                         Создать заявку
                     </Button>
@@ -139,8 +159,8 @@ function SectionSelect ({ section, setSection}) {
                     Выберите тип поломки
                 </MenuItem>
                 { 
-                    sectionList.map((section) => {
-                        return <MenuItem value={section}> {section} </MenuItem>
+                    sectionList.map((section, index) => {
+                        return <MenuItem value={section} key={index}> {section} </MenuItem>
                     })
                 }
                 <MenuItem onClick={()=>{setOpenSectionDialog(true);}} value={-1}>+ Добавить</MenuItem>
@@ -161,12 +181,13 @@ function SectionSelect ({ section, setSection}) {
   );
 }
 
-function UploaderInput() {
+function UploaderInput({ onChange }) {
     const [fileName, setFileName] = useState('');
     const handleFileChange = (event) => {
       const file = event.target.files[0];
       if (file) {
         setFileName(file.name);
+        onChange(file);
       }
     };
   
