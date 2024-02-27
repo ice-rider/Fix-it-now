@@ -1,4 +1,5 @@
 import os
+import time
 
 from flask import Flask
 from flask_cors import CORS
@@ -26,13 +27,17 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     session_id = jwt_payload["sub"]["session_id"]
     return SessionModel.is_token_blocked(session_id)
 
+print("sleeping...")   # time for full powering database image
+time.sleep(3)
+print("waked up!")
+
 # configure database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DEVELOPMENT_DATABASE_URI')  # PRODUCTION_DATABASE_URI
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')  # PRODUCTION_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
 
 # configure cdn url
-app.config["CDN_URL"] = os.getenv('DEVELOPMENT_CDN_URL')  # PRODUCTION_CDN_URL
+app.config["CDN_URL"] = os.getenv('CDN_URL')  # PRODUCTION_CDN_URL
 
 # initialization app to database and creating superuser
 db.init_app(app)

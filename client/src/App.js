@@ -24,7 +24,7 @@ function App() {
     username: localStorage.getItem("username"),
     user_id: localStorage.getItem('user_id')
   })
-  
+  console.log("SERVER_URL:", process.env, process.env.REACT_APP_SERVER_URL);
   axios.defaults.baseURL = process.env.SERVER_URL;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
   

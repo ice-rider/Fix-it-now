@@ -1,4 +1,4 @@
-from flask_restful_api import Resource
+from flask_restful import Resource
 from flask import request
 
 from models import *

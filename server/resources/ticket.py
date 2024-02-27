@@ -1,6 +1,6 @@
 import requests
 
-from flask_restful_api import Resource
+from flask_restful import Resource
 from flask import request, current_app
 
 from models import TicketModel
