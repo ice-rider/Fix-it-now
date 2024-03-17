@@ -3,13 +3,15 @@ FROM node:14 AS build
 
 WORKDIR /client
 
-COPY package*.json ./
+COPY package*.json /client
 
 RUN npm install
 
-COPY . .
+COPY . /client
 
-ENV INLINE_RUNTIME_CHUNK=false
+ARG REACT_APP_SERVER_URL
+
+ENV REACT_APP_SERVER_URL=${REACT_APP_SERVER_URL}
 
 RUN npm run build
 

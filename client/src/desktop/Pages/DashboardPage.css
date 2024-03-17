@@ -19,6 +19,13 @@
     justify-content: flex-start;
     padding-top: 5px;
 }
+
+.closed.TicketBox {
+    cursor: no-drop;
+    color: grey;
+    background: lightgrey;
+}
+
 .TicketBox {
     position: relative;
     box-sizing: border-box;

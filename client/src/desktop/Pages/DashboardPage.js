@@ -52,7 +52,7 @@ export default function DashboardPage () {
 
 function TicketListElem({ ticket, onClick }) {
     return (
-        <div className="TicketBox" onClick={onClick}>
+        <div className={ticket.status + " TicketBox"} onClick={onClick}>
             <div className="Section">{ticket.section}</div>
             <div className="Description">{ticket.description}</div>
             <div className="Location">{ticket.location}</div>

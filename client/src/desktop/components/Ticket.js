@@ -41,11 +41,16 @@ export default function Ticket({ ticket }) {
                 <div className="TicketAuthor"> Автор: {author.username} </div>
                 <div>Статус: {ticket.status} </div>
             </div>
-            { user.user_id-0 === ticket.teacher_id &&
+            { user.user_id-0 === ticket.author_id && ticket.status != "closed" &&
                 <div className="close-btn-wrapper" onClick={close_ticket}>
                     Проблема решена, закрыть заявку.
                 </div>
             }
+            { user.user_id-0 !== ticket.author_id && ticket.status == "open" && user.user_role == "worker" ?
+                <div className="take-in-work-btn-wrapper" onClick={close_ticket}>
+                    Взять заявку.
+                </div>
+                : null }
         </div>
     );
 }

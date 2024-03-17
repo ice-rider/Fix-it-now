@@ -1,8 +1,24 @@
-version: '3'
-services:    
-  database:
-    container_name: database
+version: '3.9'
+services:
+  server:
+    container_name: backend
+    build: ./server
+    ports:
+      - "5000:5000"
+    restart: on-failure
+    environment:
+      - DATABASE_URI=postgresql://postgres:postgres@fix_it_now_db:5432/postgres
+      - JWT_SECRET_KEY=ijcicjh;IHW;OIH:oihaoih
+    volumes:
+      - ./server:/server
+    command: flask run --host=0.0.0.0 --port=5000
+    depends_on:
+      - fix_it_now_db
+  
+  fix_it_now_db:
+    container_name: fix_it_now_db
     image: postgres:12
+    restart: "on-failure"
     ports:
       - "5432:5432"
     environment:
@@ -12,27 +28,16 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  server:
-    build: ./server
-    container_name: backend
-    environment:
-      - DATABASE_URI=postgresql://postgres:postgres@database:5432/postgres
-      - JWT_SECRET_KEY=ijcicjh;IHW;OIH:oihaoih
-    restart: on-failure
-    volumes:
-      - ./server:/server
-    ports:
-      - "5000:5000"
-    command: flask run --host=0.0.0.0 --port=5000
-    depends_on:
-      - database
-
   client:
-    build: ./client
     container_name: client
+    build: 
+      context: ./client
+      args:
+        REACT_APP_SERVER_URL: https://friendly-space-winner-wrr746j5q5gx39q5g-5000.app.github.dev/api/
     restart: on-failure
     ports:
       - "3000:3000"
+    command: serve -s build
     depends_on:
       - server
 

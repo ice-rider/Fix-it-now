@@ -49,7 +49,8 @@ export default function LoginPage () {
                         access_token: res.data.access_token,
                         avatar: res.data.user.avatar,
                         username: res.data.user.username,
-                        user_id: res.data.user.id
+                        user_id: res.data.user.id,
+                        user_role: res.data.role
                     })
                     console.log(data.user)
                     navigate('/dashboard')
