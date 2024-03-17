@@ -8,12 +8,25 @@ services:
     restart: on-failure
     environment:
       - DATABASE_URI=postgresql://postgres:postgres@fix_it_now_db:5432/postgres
+      - CDN_URL=https://shiny-goggles-r44gx9v657j53wx9-4000.app.github.dev/
       - JWT_SECRET_KEY=ijcicjh;IHW;OIH:oihaoih
     volumes:
       - ./server:/server
     command: flask run --host=0.0.0.0 --port=5000
     depends_on:
       - fix_it_now_db
+
+  cdn:
+    container_name: cdn
+    build: ./cdn
+    ports:
+      - "4000:4000"
+    restart: on-failure
+    volumes:
+      - ./server:/server
+    command: flask run --host=0.0.0.0 --port=4000
+    depends_on:
+      - server
   
   fix_it_now_db:
     container_name: fix_it_now_db
@@ -33,7 +46,7 @@ services:
     build: 
       context: ./client
       args:
-        REACT_APP_SERVER_URL: https://friendly-space-winner-wrr746j5q5gx39q5g-5000.app.github.dev/api/
+        REACT_APP_SERVER_URL: https://shiny-goggles-r44gx9v657j53wx9-5000.app.github.dev/api/  # replace to actual
     restart: on-failure
     ports:
       - "3000:3000"

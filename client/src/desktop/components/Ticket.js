@@ -11,7 +11,7 @@ export default function Ticket({ ticket }) {
     const { user } = useContext(Data);
 
     useEffect(() => {
-        axios.get(`/user/${ticket.teacher_id}`)
+        axios.get(`/user/${ticket.author_id}`)
             .then((response) => {
                 setAuthor(response.data);
             })
@@ -20,7 +20,7 @@ export default function Ticket({ ticket }) {
     const close_ticket = () => {
         axios.patch('/ticket', {
             status: 'closed',
-            ticket_id: ticket.teacher_id
+            ticket_id: ticket.id
         }).then(
             res => toast.success("Заявка успешно закрыта")
         ).catch(
