@@ -1,4 +1,4 @@
-from flask_restful_api import Resource
+from flask_restful import Resource
 from flask import request
 
 from models import *
@@ -6,6 +6,7 @@ from models import *
 
 class User(Resource):
     path = "/user"
+    
     @classmethod
     def get(cls):
         params = request.args

@@ -1,4 +1,5 @@
 import os
+import time
 
 from flask import Flask
 from flask_cors import CORS
@@ -12,10 +13,6 @@ from resources import api
 app = Flask(__name__)
 CORS(app)
 
-# use .env file for debugging.
-# in production comment this line and use host environment variables
-load_dotenv()
-
 # create jwt manager object for configuring app with jwt
 jwt = JWTManager(app)
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
@@ -26,13 +23,14 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     session_id = jwt_payload["sub"]["session_id"]
     return SessionModel.is_token_blocked(session_id)
 
+time.sleep(1)
 # configure database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DEVELOPMENT_DATABASE_URI')  # PRODUCTION_DATABASE_URI
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
 
 # configure cdn url
-app.config["CDN_URL"] = os.getenv('DEVELOPMENT_CDN_URL')  # PRODUCTION_CDN_URL
+app.config["CDN_URL"] = os.getenv('CDN_URL')
 
 # initialization app to database and creating superuser
 db.init_app(app)

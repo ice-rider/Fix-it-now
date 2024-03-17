@@ -137,7 +137,7 @@ export default function NewTicketPage () {
 }
 
 function SectionSelect ({ section, setSection}) {
-    const [sectionList, setSectionList] = useState(["[ плотник ]", "Электрика", "...(?)"])
+    const [sectionList, setSectionList] = useState(["Плотник", "Электрик"])
     const [openSectionDialog, setOpenSectionDialog] = useState(false);
 
     const handleChange = (event) => {

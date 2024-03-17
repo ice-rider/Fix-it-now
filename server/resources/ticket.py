@@ -1,6 +1,7 @@
 import requests
+from typing import Union
 
-from flask_restful_api import Resource
+from flask_restful import Resource
 from flask import request, current_app
 
 from models import TicketModel
@@ -12,7 +13,7 @@ class Ticket(Resource):
     DEFAULT_PHOTO_URL = 'no-photo'
 
     @classmethod
-    def get(cls):
+    def get(cls) -> Union[dict, int]:
         params = request.args
         if not params.get('id'):
             return {'message': "Ticket ID is required"}, 400
@@ -22,11 +23,11 @@ class Ticket(Resource):
         if not ticket:
             return {'message': 'Ticket not found'}, 404
 
-        return ticket
+        return ticket, 200
 
     @classmethod
     @jwt_required()
-    def post(cls):
+    def post(cls) -> Union[dict, int]:
         payload = get_jwt_identity()
 
         if payload.get('role') == 'worker':
@@ -36,20 +37,18 @@ class Ticket(Resource):
 
         photo_url = cls.DEFAULT_PHOTO_URL
 
-        # uploading photo to cdn if it exists
-        print(args.keys())
-        if args.get('image'):
-            raw_photo = args.get('image')  # photo file in base64 format
+        if args.get('image'):                   # TODO: нах снести это, добавить async, а лучше celery
+            raw_photo = args.get('image')       # photo file in base64 format
             cdn_url = current_app.config.get('CDN_URL')
-            response = requests.post(cdn_url+"/upload", json={'image': raw_photo})
+            response = requests.post(cdn_url+"upload", json={'image': raw_photo})
 
             print("response:", response)
 
-            if response.status_code == 201 and response.json:
+            if response.status_code == 201 and response.json:      # и вообще потом порефакторить
                 photo_url = cdn_url + response.json().get('url')
 
         ticket = TicketModel(
-            teacher_id  = payload.get('id'),
+            author_id  = payload.get('id'),
             worker_id   = None,
             section     = args.get('section'),
             description = args.get('description'),
@@ -61,7 +60,7 @@ class Ticket(Resource):
 
     @classmethod
     @jwt_required()
-    def patch(cls):
+    def patch(cls) -> Union[dict, int]:
         args = request.get_json()
         if not args or not args.get('status') or not args.get('ticket_id'):
             return {"message": "missed args status or ticket_id;"}, 400
@@ -71,22 +70,21 @@ class Ticket(Resource):
         ticket = TicketModel.get_by_id(args['ticket_id'])
         if payload.get('role') == "worker" and args["status"] == 'in_work':
             ticket.set_status('in_work')
-        
+            return {"message": "successfully get ticket in work"}, 201
+
         if payload.get('role') != "worker" and args["status"] == "closed":
             ticket.set_status('closed')
-        
-        return {"message": "you can not set this status"}, 200
+            return {"message": "ticket successfully closed"}
 
-    @classmethod
-    def delete(cls):
-        pass
+        
+        return {"message": "you can not set this status", "payload": payload, "args": args}, 403
 
 
 class TicketList(Resource):
     path = "/ticket-list"
 
     @classmethod
-    def get(cls):
+    def get(cls) -> Union[dict, int]:
         tickets = TicketModel.get_all()
         
         if not tickets:

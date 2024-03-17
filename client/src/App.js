@@ -24,12 +24,8 @@ function App() {
     username: localStorage.getItem("username"),
     user_id: localStorage.getItem('user_id')
   })
-  let servers = {
-    dev_server: "http://localhost:5000/api",
-    prod_server: "https://fix-it-now-24-8go9.onrender.com/api"
-  }
-  
-  axios.defaults.baseURL = process.env.SERVER_URL;
+  console.log(process.env)
+  axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
   
   useEffect(() => {
@@ -44,6 +40,7 @@ function App() {
     localStorage.setItem("avatar", data.avatar);
     localStorage.setItem("username", data.username);
     localStorage.setItem("user_id", data.user_id)
+    localStorage.setItem("user_role", data.user_role)
   }
 
   return (

@@ -12,7 +12,7 @@ class TicketModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     section = db.Column(db.String)
-    teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     worker_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     description = db.Column(db.String(500))
     location = db.Column(db.String(100))
@@ -23,17 +23,13 @@ class TicketModel(db.Model):
         return {
             "id": self.id,
             "section": self.section,
-            "teacher_id": self.teacher_id,
+            "author_id": self.author_id,
             "worker_id": self.worker_id,
             "description": self.description,
             "location": self.location,
             "status": self.status.value,
             "photo_url": self.photo
         }
-
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
 
     @classmethod
     def get_all(cls):
@@ -45,3 +41,8 @@ class TicketModel(db.Model):
 
     def set_status(self, status: str):
         self.status = TicketStatus(status)
+        self.save()
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
