@@ -33,7 +33,7 @@ export default function Ticket({ ticket }) {
     return (
         <div className="TicketView" visible={ticket.status}>
             <div className="TicketPhotoWrapper">
-                <img className="TicketPhoto" src={ticket.photo_url} alt="photo of ptoblem" />
+                <img className="TicketPhoto" src={ticket.photo_url} alt="ptoblem" />
             </div>
             <div className="TicketInfo">
                 <div className="TicketSection"> {ticket.section} </div>
@@ -41,12 +41,12 @@ export default function Ticket({ ticket }) {
                 <div className="TicketAuthor"> Автор: {author.username} </div>
                 <div>Статус: {ticket.status} </div>
             </div>
-            { user.user_id-0 === ticket.author_id && ticket.status != "closed" &&
+            { user.user_id-0 === ticket.author_id && ticket.status !== "closed" &&
                 <div className="close-btn-wrapper" onClick={close_ticket}>
                     Проблема решена, закрыть заявку.
                 </div>
             }
-            { user.user_id-0 !== ticket.author_id && ticket.status == "open" && user.user_role == "worker" ?
+            { user.user_id-0 !== ticket.author_id && ticket.status === "open" && user.user_role === "worker" ?
                 <div className="take-in-work-btn-wrapper" onClick={close_ticket}>
                     Взять заявку.
                 </div>
