@@ -1,0 +1,1 @@
+# [Ссылка](https://drive.google.com/file/d/12BX-L73lwYcx0L3pbtqMFtGA9sJjdaZF/view?usp=sharing) на видео (гугл диск).

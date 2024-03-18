@@ -8,7 +8,7 @@ services:
     restart: on-failure
     environment:
       - DATABASE_URI=postgresql://postgres:postgres@fix_it_now_db:5432/postgres
-      - CDN_URL=https://musical-waddle-jjj5g6w7p4pgfp7xj-4000.app.github.dev/
+      - CDN_URL=https://symmetrical-space-happiness-7vv9xq45jx69fwxjg-4000.app.github.dev/
       - JWT_SECRET_KEY=ijcicjh;IHW;OIH:oihaoih
     volumes:
       - ./server:/server
@@ -46,7 +46,7 @@ services:
     build: 
       context: ./client
       args:
-        REACT_APP_SERVER_URL: https://musical-waddle-jjj5g6w7p4pgfp7xj-5000.app.github.dev/api/  # replace to actual
+        REACT_APP_SERVER_URL: https://symmetrical-space-happiness-7vv9xq45jx69fwxjg-5000.app.github.dev/api/  # replace to actual
     restart: on-failure
     ports:
       - "3000:3000"
