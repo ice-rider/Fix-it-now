@@ -41,7 +41,7 @@ export default function DashboardPage () {
                 }
             </div>
             {
-                activeTicket != -1 ?
+                activeTicket !== -1 ?
                     <Ticket ticket={data[activeTicket]} />
                     :
                     <div className="bb" caption="Выберите проблему из списка" />
