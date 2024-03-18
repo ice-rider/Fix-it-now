@@ -37,7 +37,7 @@ class Ticket(Resource):
 
         photo_url = cls.DEFAULT_PHOTO_URL
 
-        if args.get('image'):                   # TODO: нах снести это, добавить async, а лучше celery
+        if args.get('image'):                   # TODO: снести это, добавить async, а лучше celery
             raw_photo = args.get('image')       # photo file in base64 format
             cdn_url = current_app.config.get('CDN_URL')
             response = requests.post(cdn_url+"upload", json={'image': raw_photo})

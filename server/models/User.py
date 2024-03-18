@@ -17,7 +17,7 @@ class UserModel(db.Model):
     username = db.Column(db.String(50))
     login = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(100))
-    role = db.Column(db.Enum(UserRole))
+    role = db.Column(db.Enum(UserRole), default=UserRole.TEACHER)
     avatar = db.Column(db.String, default="no-avatar")
 
     def json(self):

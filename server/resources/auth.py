@@ -17,6 +17,9 @@ class Auth(Resource):
         
         user = UserModel.auth(login, password)
 
+        if user is None:
+            return {"message": "user not found"}, 404
+
         session = SessionModel(user_id=user.id)
         session.save()
         

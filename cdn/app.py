@@ -21,7 +21,8 @@ def upload():
     image_bytes = base64.b64decode(b64_image)
 
     filename = f"images/{int(time.time())}.jpg"
-    file = open(filename, 'w+')
+    file = open(filename, "w+")
+    file.write(" ")
     file.close()
 
     image = Image.open(BytesIO(image_bytes)).convert("RGB")
