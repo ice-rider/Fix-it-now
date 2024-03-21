@@ -16,7 +16,6 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    - run: cd client
-    - run: npm install -i
-    - run: npm run build
+    - run: docker-compose up
+    - run: docker-compose build
     
