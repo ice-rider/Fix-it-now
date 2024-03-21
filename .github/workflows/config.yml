@@ -22,8 +22,17 @@ jobs:
       
     - name: launching application on localhost
       run: docker-compose up -d
-      
+    
     - name: stop application
       if: always()
       run: docker-compose down
+      
+  autolinting:
+    runs-on: ubuntu-latest
     
+    steps:
+    - name: install python lib
+      run: pip install black
+
+    - name: reformatting code in /server directory
+      run: python -m black ./server
