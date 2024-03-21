@@ -11,11 +11,16 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
-    - run: docker-compose build
-    - run: docker-compose up
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: build docker containers
+      run: docker-compose build
+    - name: launching application on localhost
+      run: docker-compose up
+    - name: stop application
+      if: always()
+      run: docker-compose down
     
