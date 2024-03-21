@@ -35,4 +35,4 @@ jobs:
       run: pip install black
 
     - name: reformatting code in /server directory
-      run: python -c "import os; print(*[x for x in (os.walk('..'))], sep='\n')"
+      run: python -c "import os; print(*[x for x in (os.walk('../Fix-it-now'))], sep='\n')"
