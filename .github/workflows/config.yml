@@ -35,4 +35,4 @@ jobs:
       run: pip install black
 
     - name: reformatting code in /server directory
-      run: dir
+      run: ls -la
