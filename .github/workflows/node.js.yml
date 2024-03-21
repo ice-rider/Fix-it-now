@@ -16,10 +16,13 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v3
+      
     - name: build docker containers
       run: docker-compose build
+      
     - name: launching application on localhost
-      run: docker-compose up
+      run: docker-compose up -d
+      
     - name: stop application
       if: always()
       run: docker-compose down
