@@ -33,7 +33,7 @@ export default function Ticket({ ticket }) {
     return (
         <div className="TicketView" visible={ticket.status}>
             <div className="TicketPhotoWrapper">
-                <img className="TicketPhoto" src={ticket.photo_url} alt="ptoblem" />
+                <img className="TicketPhoto" src={ticket.photo_url} alt="problem phоto" />
             </div>
             <div className="TicketInfo">
                 <div className="TicketSection"> {ticket.section} </div>
